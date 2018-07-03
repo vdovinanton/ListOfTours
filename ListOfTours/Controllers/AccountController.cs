@@ -1,90 +1,89 @@
 ﻿using System;
-using ListOfTours.Repository;
-using ListOfTours.Repository.Models;
-using ListOfTours.ViewModels;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
+using ListOfTours.ViewModels;
+using ListOfTours.Models;
+using ListOfTours.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using ListOfTours.Core.Services;
 
 namespace ListOfTours.Controllers
 {
     public class AccountController : Controller
     {
-        private UserContext db;
-        public AccountController(UserContext context)
+        private readonly IPersonService _personService;
+        public AccountController(IPersonService personService)
         {
-            db = context;
+            _personService = personService;
         }
-        [HttpGet]
-        public IActionResult Login()
+
+        [HttpPost("/token")]
+        public IActionResult Login([FromBody]Person person)
         {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            if (ModelState.IsValid)
+            var existUser = _personService.Get(person);
+
+            if (existUser != null)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
-                if (user != null)
+                var requestAt = DateTime.Now;
+                var expiresIn = requestAt + AuthOptions.ExpiresSpan;
+                var token = GenerateToken(existUser, expiresIn);
+
+                return Json(new RequestResult
                 {
-                    await Authenticate(model.Email); // аутентификация
-
-                    return RedirectToAction("Index", "Home");
-                }
-                ModelState.AddModelError("", "Not valid password or login");
+                    State = RequestState.Success,
+                    Data = new
+                    {
+                        requertAt = requestAt,
+                        expiresIn = AuthOptions.ExpiresSpan.TotalSeconds,
+                        tokeyType = AuthOptions.TokenType,
+                        accessToken = token
+                    }
+                });
             }
-            return View(model);
-        }
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
+            else
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (user == null)
+                return Json(new RequestResult
                 {
-                    // добавляем пользователя в бд
-                    db.Users.Add(new User { Email = model.Email, Password = model.Password });
-                    await db.SaveChangesAsync();
-
-                    await Authenticate(model.Email); // аутентификация
-
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                    ModelState.AddModelError("", "Not valid password or login");
+                    State = RequestState.Failed,
+                    Msg = "Username or password is invalid"
+                });
             }
-            return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private string GenerateToken(Person user, DateTime expires)
         {
-            var claims = new List<Claim>
+            var handler = new JwtSecurityTokenHandler();
+
+            ClaimsIdentity identity = new ClaimsIdentity(
+                new GenericIdentity(user.Login, "TokenAuth"),
+                new[] { new Claim("ID", user.ID.ToString()) }
+            );
+
+            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+                Issuer = AuthOptions.Issuer,
+                Audience = AuthOptions.Audience,
+                SigningCredentials = AuthOptions.SigningCredentials,
+                Subject = identity,
+                Expires = expires
+            });
+            return handler.WriteToken(securityToken);
         }
 
-        public async Task<IActionResult> Logout()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        public IActionResult GetUserInfo()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            return Json(new RequestResult
+            {
+                State = RequestState.Success,
+                Data = new { UserName = claimsIdentity.Name }
+            });
         }
     }
 }

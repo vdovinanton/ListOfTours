@@ -1,0 +1,21 @@
+<header>
+  <div class="" style="background-color:  gray; padding: 2px;">
+    <div class="">
+      <!--<a [routerLink]="['/home']" class="mdl-layout__tab" routerLinkActive="is-active">Home<span class="mdl-ripple"></span></a>
+      <a [routerLink]="['/about']" class="mdl-layout__tab" routerLinkActive="is-active">About<span class="mdl-ripple"></span></a>-->
+      <button (click)="logout()"><span class="glyphicon-log-out">logout</span></button>
+    </div>
+  </div>
+</header>
+<br />
+<div style="padding: 10px; background-color: aliceblue;">
+  <router-outlet></router-outlet>
+</div>
+<br />
+<footer>
+  <div style="background-color:  gray; padding: 2px;">
+    <div>
+      Demo | Description | Date
+    </div>
+  </div>
+</footer>
