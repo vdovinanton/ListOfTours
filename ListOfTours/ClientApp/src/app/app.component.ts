@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/AuthService';
 import { Router } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+  images: Array<string>;
 
   constructor(private authService: AuthService, private router: Router) {
     
