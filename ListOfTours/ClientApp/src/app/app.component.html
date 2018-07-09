@@ -1,70 +1,42 @@
-<!-- <div class="jumbotron">
-  <div class="container">
-    <ngb-alert type="success" [dismissible]="false">
-      Bootstrap is working!
-    </ngb-alert>
-
-    <h1>
-      <i class="fa fa-bath" aria-hidden="true"></i>
-      And so is Font Awesome!
-    </h1>
-  </div>
-</div>
-
 <div class="container">
-  <p>
-    A progress bar:
-    <ngb-progressbar showValue="true" type="success" [value]="65">
-    </ngb-progressbar>
-  </p>
-</div>
-
-<div class="container">
-  <ngb-tabset>
-    <ngb-tab title="Bacon">
-      <ng-template ngbTabContent>
-        <p class="mt-4">
-          Content for tab 1.
-          <button type="button"
-                  class="btn btn-secondary"
-                  placement="bottom"
-                  ngbPopover="A popover in tab 1"
-                  popoverTitle="Bacon is good">
-            Click me
-          </button>
-        </p>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Lettuce">
-      <ng-template ngbTabContent>
-        <p>Content for tab 2</p>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Tomatoes">
-      <ng-template ngbTabContent>
-        <p>Content for tab 3</p>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
-</div> -->
-
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-      <div class="box">
-          One of three columns
-      </div>
+  <div class="header clearfix">
+    <br>
+    <nav >
+      <ul *ngIf="!isUserLoggedIn"></ul>
+        <ul *ngIf="isUserLoggedIn" class="nav nav-pills float-right" style="margin-top: 30px;">
+          <li class="nav-item">
+              <h3> {{ currentUser?.userName }}</h3>
+          </li>
+          <li class="nav-item">
+            <div class="container">
+                <button (click)="logout()" type="button" class="btn btn-light btn-sm">Log out <i class="fa fa-sign-out" aria-hidden="true"></i></button>
+            </div>
+          </li>
+          <li class="nav-item">
+            
+          </li>
+        </ul>
+      </nav>
+    <div *ngIf="!isUserLoggedIn">
+        <div class="col-12 text-center logo" >
+            <i class="fa fa-pied-piper" aria-hidden="true" style="font-size: 75px;"></i>
+        </div>  
     </div>
-    <div class="col-sm">
-        <div class="box">
-            One of three columns
+    <div *ngIf="isUserLoggedIn">
+        <div class="logo" >
+            <i class="fa fa-pied-piper" aria-hidden="true" style="font-size: 75px;"></i>
         </div>
     </div>
-    <div class="col-sm">
-        <div class="box">
-            One of three columns
-        </div>
-    </div>
+    <br>
   </div>
+
+  <div class="jumbotron" style="min-height: 500px">
+      <router-outlet></router-outlet>
+  </div>
+
+  <footer class="footer" style="position: absolute; bottom: 0;">
+    <p style="color: green; background-color: black">© itcraft Internship 2018</p>
+  </footer>
+
 </div>
+  

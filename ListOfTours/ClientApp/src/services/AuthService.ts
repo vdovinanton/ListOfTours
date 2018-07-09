@@ -6,6 +6,8 @@ import { Observable, of } from 'rxjs';
 
 import { map, distinctUntilChanged, debounceTime, catchError } from 'rxjs/operators'
 import { IRequestResult } from '../models/RequestResult'
+import { IPerson } from "../models/Person";
+import { DataSharingService } from '../services/DataSharingService';
 
 //const httpOptions = {
 //  headers: new HttpHeaders({
@@ -17,15 +19,15 @@ import { IRequestResult } from '../models/RequestResult'
 export class AuthService implements CanActivate {
   private tokeyKey = "token";
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private dataSharingService: DataSharingService) { }
 
   public canActivate() {
-    //if (this.checkLogin()) {
-      //return true;
-    //} else {
-      //this.router.navigate(['login']);
+    if (this.checkLogin()) {
+      return true;
+    } else {
+      this.router.navigate(['login']);
       return false;
-    //}
+    }
   }
 
   public login(email: string, password: string): Observable<IRequestResult> {
@@ -48,9 +50,33 @@ export class AuthService implements CanActivate {
       );
   }
 
+  public logout(): void {
+    this.dataSharingService.currentUser.next(null);
+    sessionStorage.clear();
+    this.router.navigate(["login"]);
+  }
+
   public checkLogin(): boolean {
     let token = sessionStorage.getItem(this.tokeyKey);
+    this.dataSharingService.isUserLoggedIn.next(token != null);
     return token != null;
+  }
+
+  public currentUser(): Observable<IPerson> {
+    let headers = this.initAuthHeaders();
+
+    return this.http.get<IRequestResult>('/currentuser', { headers: headers })
+      .pipe(
+        map (
+          res => {
+            let person : IPerson;
+            person = res.data as IPerson;
+            this.dataSharingService.currentUser.next(person);
+            console.log(person);
+            return person;
+          }
+        )
+      )
   }
 
   private initAuthHeaders(): HttpHeaders {

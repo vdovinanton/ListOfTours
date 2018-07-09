@@ -1,33 +1,24 @@
-<!--<div class="">
-  <div class="">
-    <h2 class="">login</h2>
+<div class="row">
+    <div class="col-12 text-center">
+      <div>
+          <h1 class="display-5">Sign in</h1>
+          <p class="lead">Sign in with your personal account</p>
+      
+          <p>
+            <b>Email:</b><br>
+            <input [(ngModel)]="userName" type="text" size="40">
+          </p>
+      
+          <p>
+            <b>Password:</b><br>
+            <input [(ngModel)]="password" type="password" size="40">
+          </p>
+          <p><a (click)="login()" class="btn btn-lg btn-success" role="button">Sign in <i class="fa fa-sign-in" aria-hidden="true"></i></a></p>
+      </div>
+    </div>
+    <!-- <div class="col-4 hidden-lg">
+        <div class="intro" style="position: relative;right: 90px;">
+            <h1 style="font-size: 200px"><i class="fa fa-pied-piper-alt" aria-hidden="true"></i></h1>
+        </div>
+    </div> -->
   </div>
-</div>
-<div class="">
-  <table>
-    <tr>
-      <td>user name:</td>
-      <td><input [(ngModel)]="userName" placeholder="user1" /></td>
-    </tr>
-    <tr>
-      <td>password:</td>
-      <td><input [(ngModel)]="password" placeholder="user1psd" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><button (click)="login()" >Login</button></td>
-    </tr>
-  </table>
-</div>-->
-
-<div>
-  <p>
-    <b>Email:</b><br>
-    <input [(ngModel)]="userName" type="text" size="40">
-  </p>
-  <p>
-    <b>Password:</b><br>
-    <input [(ngModel)]="password" type="password" size="40">
-  </p>
-  <button (click)="login()"><span class="glyphicon-log-in">login</span></button>
-</div>

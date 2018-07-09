@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/AuthService';
 import { Router } from '@angular/router';
+import { IPerson } from '../models/Person';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { map } from 'rxjs/operators';
+
+import { DataSharingService } from '../services/DataSharingService';
 
 @Component({
   selector: 'app-root',
@@ -10,26 +13,26 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  images: Array<string>;
+  currentUser: IPerson;
+  isUserLoggedIn: boolean;
 
-  constructor(private authService: AuthService, private router: Router) {
+
+  constructor(private authService: AuthService, private router: Router, private dataSharingService: DataSharingService) {
     
   }
 
   public logout() {
-    sessionStorage.clear();
-    this.router.navigate(["login"]);
+    this.authService.logout();
   }
 
   ngOnInit() {
-    //this.authService.getUserInfo$().subscribe(
-    //  res => {
-    //    if (res != null && res.data) {
-    //      let thisuser = res.data
-    //      if (thisuser && thisuser.userName) {
-    //        this.userName = thisuser.userName;
-    //      }
-    //    }
-    //  });
+    console.log(this.dataSharingService.isUserLoggedIn)
+      this.dataSharingService.isUserLoggedIn.subscribe( value => {
+        this.isUserLoggedIn = value;
+    });
+    console.log(this.dataSharingService.currentUser)
+    this.dataSharingService.currentUser.subscribe(value => {
+      this.currentUser = value;
+    })
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from '../services/AuthService';
 import { Router } from '@angular/router';
+import { IPerson } from '../models/Person';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,15 @@ export class HomeComponent {
 
   //todo move to service
   private tokeyKey = "token";
+  private currentUser: IPerson;
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     if (this.authService.checkLogin()) {
+      this.authService.currentUser().subscribe(result => {
+        this.currentUser = result as IPerson;
+      }, error => console.error(error));
         this.getTableData() // mock
     } else {
       this.router.navigate(["login"]);

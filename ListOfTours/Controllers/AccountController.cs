@@ -75,15 +75,22 @@ namespace ListOfTours.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet]
+        [HttpGet("/currentuser")]
         public IActionResult GetUserInfo()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            return Json(new RequestResult
+            if (claimsIdentity == null)
             {
-                State = RequestState.Success,
-                Data = new { UserName = claimsIdentity.Name }
-            });
+                return null;
+            }
+            else
+            {
+                return Json(new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = new { UserName = claimsIdentity.Name }
+                });
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
 export interface IPerson {
-  login: number;
+  userName: string;
   password: string;
 }
