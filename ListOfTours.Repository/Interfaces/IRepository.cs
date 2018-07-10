@@ -62,5 +62,7 @@ namespace ListOfTours.Repository.Interfaces
         /// <param name="entitys"><see cref="TEntity"/> collection</param>
         void RemoveRange(IEnumerable<TEntity> entitys);
 
+        int Complete();
+
     }
 }

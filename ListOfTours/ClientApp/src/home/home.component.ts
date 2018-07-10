@@ -13,17 +13,20 @@ export class HomeComponent {
 
   public values: string[];
 
+  //todo: add Guard
   //todo move to service
   private tokeyKey = "token";
-  private currentUser: IPerson;
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     if (this.authService.checkLogin()) {
-      this.authService.currentUser().subscribe(result => {
-        this.currentUser = result as IPerson;
-      }, error => console.error(error));
+
+      // getting current user for set property 
+      // dataSharingService.currentUser in the DataSharingService
+      this.authService.currentUser().subscribe(() => { },
+       error => console.error(error));
+
         this.getTableData() // mock
     } else {
       this.router.navigate(["login"]);

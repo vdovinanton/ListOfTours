@@ -13,6 +13,7 @@ using ListOfTours.Core.Services;
 
 namespace ListOfTours.Controllers
 {
+    [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly IPersonService _personService;
@@ -21,8 +22,8 @@ namespace ListOfTours.Controllers
             _personService = personService;
         }
 
-        [HttpPost("/token")]
-        public IActionResult Login([FromBody]Person person)
+        [HttpPost]
+        public IActionResult Token([FromBody]Person person)
         {
             var existUser = _personService.Get(person);
 
@@ -75,8 +76,8 @@ namespace ListOfTours.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("/currentuser")]
-        public IActionResult GetUserInfo()
+        [HttpGet]
+        public IActionResult Get()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             if (claimsIdentity == null)
