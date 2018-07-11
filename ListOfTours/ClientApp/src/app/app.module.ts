@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from '../login/login.component';
 import { HomeComponent } from "../home/home.component";
+import { RegistrationComponent } from "../registration/registration.component"
+
 import { AuthService } from "../services/AuthService";
 import { DataSharingService } from "../services/DataSharingService";
 
@@ -15,7 +17,8 @@ import { DataSharingService } from "../services/DataSharingService";
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    RegistrationComponent
   ],
   imports: [
     //NgbModule.forRoot(),
@@ -25,6 +28,7 @@ import { DataSharingService } from "../services/DataSharingService";
     RouterModule.forRoot([
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
+      { path: 'signon', component: RegistrationComponent },
       { path: 'home', component: HomeComponent },
       { path: '**', redirectTo: 'login' },
       //{ path: 'secret', component: SecretComponent, canActivate: [ AuthService] }
