@@ -24,11 +24,12 @@ import { DataSharingService } from "../services/DataSharingService";
     //NgbModule.forRoot(),
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
-      { path: 'signon', component: RegistrationComponent },
+      { path: 'signup', component: RegistrationComponent },
       { path: 'home', component: HomeComponent },
       { path: '**', redirectTo: 'login' },
       //{ path: 'secret', component: SecretComponent, canActivate: [ AuthService] }

@@ -1,21 +1,55 @@
 <div class="row">
     <div class="col-12 text-center">
-          <form style="max-width: 400px; margin: auto; width: 50%;">
-              <div class="form-group">
-                <h1 class="display-5">Sign in</h1>
-                <p class="lead">Sign in with your personal account</p>
-                <label for="exampleInputEmail1">Email address </label>
-                <input type="email" class="form-control" [(ngModel)]="userName" aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password </label>
-                <input type="password" class="form-control" [(ngModel)]="password">
-              </div>
-              <div class="row">
-                  <p class="col-sm-12 col-md-6 col-lg-6"><a (click)="login()" class="btn btn-lg btn-info" role="button">Sign on <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
-                  <p class="col-sm-12 col-md-6 col-lg-6"><a (click)="login()" class="btn btn-lg btn-success" role="button">Sign in <i class="fa fa-sign-in" aria-hidden="true"></i></a></p>  
-              </div>
-            </form>
+        <form [formGroup]="_myForm" novalidate (ngSubmit)="submit()" style="max-width: 400px; margin: auto; width: 50%;">
+            <h1 class="display-5">Sign in</h1>
+            <label>Sign in with your personal account, if your do not have any account your can <a [routerLink]="['/signup']">sign on</a></label>
+
+            <!-- EMAIL -->
+            <div class="form-group">
+                <input class="form-control" name="email" formControlName="userEmail" placeholder="Email"/>
+
+                <div class="alert alert-danger"
+                    *ngIf="_myForm.controls['userEmail'].invalid && _myForm.controls['userEmail'].touched">
+                    Your Email is not correct
+                </div>
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> 
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" name="password" type="password" formControlName="userPassword" placeholder="Password"/>
+
+                <div class="alert alert-danger"
+                    *ngIf="_myForm.controls['userPassword'].invalid && _myForm.controls['userPassword'].touched">
+                    Your Password have to have least for symbols
+                </div>
+            </div>
+
+            <!-- CONTROL BUTTONS -->
+            <div class="form-group">
+                <button class="btn btn-lg btn-success" [disabled]="_myForm.invalid" style="color: black">
+                    Sign in <i class="fa fa-sign-in" aria-hidden="true"></i>
+                </button>
+            </div> 
+        </form>      
     </div>
-  </div>
+</div>
+
+
+
+<!-- <form style="max-width: 400px; margin: auto; width: 50%;">
+            <div class="form-group">
+              <h1 class="display-5">Sign in</h1>
+              <p class="lead">Sign in with your personal account</p>
+              <label for="exampleInputEmail1">Email address </label>
+              <input type="email" class="form-control" [(ngModel)]="userName" aria-describedby="emailHelp">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password </label>
+              <input type="password" class="form-control" [(ngModel)]="password">
+            </div>
+            <div class="row">
+                <p class="col-sm-12 col-md-6 col-lg-6"><a (click)="login()" class="btn btn-lg btn-info" role="button">Sign on <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
+                <p class="col-sm-12 col-md-6 col-lg-6"><a (click)="login()" class="btn btn-lg btn-success" role="button">Sign in <i class="fa fa-sign-in" aria-hidden="true"></i></a></p>  
+            </div>
+          </form> -->

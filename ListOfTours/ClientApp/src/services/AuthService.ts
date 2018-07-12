@@ -44,6 +44,8 @@ export class AuthService implements CanActivate {
 
   public logout(): void {
     this.dataSharingService.currentUser.next(null);
+    this.dataSharingService.isUserLoggedIn.next(false);
+    
     sessionStorage.clear();
     this.router.navigate(["login"]);
   }
