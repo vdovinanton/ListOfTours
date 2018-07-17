@@ -22,6 +22,25 @@ namespace ListOfTours.Controllers
             _personService = personService;
         }
 
+        [HttpPut]
+        public IActionResult Create([FromBody]Person person)
+        {
+            var result = new RequestResult { State = RequestState.Success };
+
+            var user = _personService.Get(person);
+
+            if (user == null)
+            {
+                _personService.Create(person);
+            }
+            else {
+                result.State = RequestState.Failed;
+                result.Msg = "User alredy created";
+            }
+
+            return Json(result);
+        }
+
         [HttpPost]
         public IActionResult Token([FromBody]Person person)
         {
@@ -60,7 +79,7 @@ namespace ListOfTours.Controllers
             var handler = new JwtSecurityTokenHandler();
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.Login, "TokenAuth"),
+                new GenericIdentity(user.Email, "TokenAuth"),
                 new[] { new Claim("ID", user.ID.ToString()) }
             );
 

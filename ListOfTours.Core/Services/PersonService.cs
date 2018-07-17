@@ -10,6 +10,7 @@ namespace ListOfTours.Core.Services
     {
         Person Get(Person person);
         ICollection<Person> GetAll();
+        void Create(Person person);
     }
     public class PersonService : IPersonService
     {
@@ -23,7 +24,13 @@ namespace ListOfTours.Core.Services
         }
         public Person Get(Person person)
         {
-            return _people.SingleOrDefault(_ => person.Login == _.Login && person.Password == _.Password);
+            return _people.SingleOrDefault(_ => person.Email == _.Email && person.Password == _.Password);
+        }
+
+        public void Create(Person person)
+        {
+            _people.Add(person);
+            _people.Complete();
         }
 
         public ICollection<Person> GetAll()

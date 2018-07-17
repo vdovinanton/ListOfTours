@@ -42,7 +42,19 @@ export class RegistrationComponent implements OnDestroy, OnInit {
   }
 
   submit() {
-    console.log('Do request for registration');
+    let email = this._myForm.controls["userEmail"].value;
+    let pwd = this._myForm.controls["userPassword"].value;
+    let firstname = this._myForm.controls["userName"].value;
+    let secondname = this._myForm.controls["userPassword"].value;
+
+    this.authService.registration(email, pwd, firstname, secondname)
+      .subscribe(result => {
+        if (result.state == 1) {
+          this.router.navigate(["login"]);
+        } else {
+          alert(result.msg);
+        }
+      })
   }
 
   ngOnDestroy() {

@@ -25,7 +25,7 @@ export class AuthService implements CanActivate {
 
   public login(email: string, password: string): Observable<IRequestResult> {
     let header = new HttpHeaders().set('Content-Type', 'application/json');
-    let body = JSON.stringify({ "Login": email, "Password": password });
+    let body = JSON.stringify({ "Email": email, "Password": password });
     let options = { headers: header };
 
     return this.http.post<IRequestResult>(this._account, body, options)
@@ -36,6 +36,24 @@ export class AuthService implements CanActivate {
             if (result.state && result.state == 1 && result.data && result.data.accessToken) {
               sessionStorage.setItem(this._tokeyKey, result.data.accessToken);
             }
+            return result;
+          }
+        )
+      );
+  }
+
+  public registration(email: string, password: string, firstname: string, lastname: string): Observable<IRequestResult>
+  {
+    let header = new HttpHeaders().set('Content-Type', 'application/json');
+    let body = JSON.stringify({ "Email": email, "Password": password, "Firstname": firstname, "LastName": lastname });
+    let options = { headers: header };
+
+    return this.http.put<IRequestResult>(this._account, body, options)
+      .pipe(
+        map(
+          res => {
+            let result = res;
+            // hendle error
             return result;
           }
         )
