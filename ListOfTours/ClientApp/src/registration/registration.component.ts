@@ -4,27 +4,36 @@ import { AuthService } from "../services/AuthService";
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 
 @Component({  
-  selector: "my-login",
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './registration.component.html',
 })
 
-export class LoginComponent implements OnDestroy, OnInit {
+export class RegistrationComponent implements OnDestroy, OnInit {
 
   private _myForm: FormGroup;
 
-  constructor(private router: Router, private authService: AuthService) {
+  // todo: user react form
+  constructor(private router: Router, private authService: AuthService) { 
     this._myForm = new FormGroup({
       "userEmail": new FormControl("", [
                           Validators.required, 
                           Validators.max(24),
                           Validators.pattern("[a-zA-Z_]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}") 
                       ]),
+      "userName": new FormControl(),
+      "userSecondName": new FormControl(),
       "userPassword": new FormControl("", [
                           Validators.required,
                           Validators.minLength(4)
+                        ]),
+      "confirmPassword": new FormControl("", [
+                          Validators.required
                         ])
-      });
+      }, this.passwordMatchValidator);
+  }
+  
+  private passwordMatchValidator(g: FormGroup) {
+    return g.get('userPassword').value === g.get('confirmPassword').value
+    ? null : {'mismatch': true};
   }
 
   ngOnInit() {
@@ -32,31 +41,22 @@ export class LoginComponent implements OnDestroy, OnInit {
       this.router.navigate(["home"]);
   }
 
-  submit(){
+  submit() {
     let email = this._myForm.controls["userEmail"].value;
     let pwd = this._myForm.controls["userPassword"].value;
-    this.authService.login(email, pwd)
-      .subscribe(result => {
-        if (result.state == 1) {
-          this.router.navigate(["home"]);
-        } else {
-          alert(result.msg);
-        }
-      }); 
-  }
+    let firstname = this._myForm.controls["userName"].value;
+    let secondname = this._myForm.controls["userPassword"].value;
 
-  login() {
-    this.authService.login(this._myForm.controls.value.toString(), this._myForm.controls.password.toString())
+    this.authService.registration(email, pwd, firstname, secondname)
       .subscribe(result => {
         if (result.state == 1) {
-          this.router.navigate(["home"]);
+          this.router.navigate(["login"]);
         } else {
           alert(result.msg);
         }
-      }); 
+      })
   }
 
   ngOnDestroy() {
-    //if (this.postStream$) { this.postStream$.unsubscribe() }
   }
 }

@@ -13,6 +13,7 @@ using ListOfTours.Core.Services;
 
 namespace ListOfTours.Controllers
 {
+    [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly IPersonService _personService;
@@ -21,8 +22,27 @@ namespace ListOfTours.Controllers
             _personService = personService;
         }
 
-        [HttpPost("/token")]
-        public IActionResult Login([FromBody]Person person)
+        [HttpPut]
+        public IActionResult Create([FromBody]Person person)
+        {
+            var result = new RequestResult { State = RequestState.Success };
+
+            var user = _personService.Get(person);
+
+            if (user == null)
+            {
+                _personService.Create(person);
+            }
+            else {
+                result.State = RequestState.Failed;
+                result.Msg = "User alredy created";
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult Token([FromBody]Person person)
         {
             var existUser = _personService.Get(person);
 
@@ -59,7 +79,7 @@ namespace ListOfTours.Controllers
             var handler = new JwtSecurityTokenHandler();
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.Login, "TokenAuth"),
+                new GenericIdentity(user.Email, "TokenAuth"),
                 new[] { new Claim("ID", user.ID.ToString()) }
             );
 
@@ -76,14 +96,21 @@ namespace ListOfTours.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        public IActionResult GetUserInfo()
+        public IActionResult Get()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            return Json(new RequestResult
+            if (claimsIdentity == null)
             {
-                State = RequestState.Success,
-                Data = new { UserName = claimsIdentity.Name }
-            });
+                return null;
+            }
+            else
+            {
+                return Json(new RequestResult
+                {
+                    State = RequestState.Success,
+                    Data = new { UserName = claimsIdentity.Name }
+                });
+            }
         }
     }
 }

@@ -54,5 +54,10 @@ namespace ListOfTours.Repository.Implementations
         {
             Context.Set<TEntity>().RemoveRange(entitys);
         }
+
+        public int Complete()
+        {
+            return Context.SaveChanges();
+        }
     }
 }

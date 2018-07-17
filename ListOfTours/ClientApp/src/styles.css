@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+
+
+body {
+    /*background-color: black;*/
+    background-image: url(assets/login-bg.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/*@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";*/
+/*@import "../node_modules/font-awesome/css/font-awesome.min.css";*/

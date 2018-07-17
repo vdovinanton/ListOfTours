@@ -1,6 +1,6 @@
 ﻿using System;
 using ListOfTours.Core.Services;
-//using ListOfTours.Core.Services;
+using ListOfTours.Models;
 using ListOfTours.Repository;
 using ListOfTours.Repository.Implementations;
 using ListOfTours.Repository.Interfaces;
@@ -27,8 +27,9 @@ namespace ListOfTours
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
+            services.AddOptions();
+            services.Configure<Person>(Configuration.GetSection("Person"));
+            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPersonRepository, PeopleRepository>();
             services.AddScoped<IPersonService, PersonService>();
