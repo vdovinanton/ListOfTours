@@ -8,9 +8,12 @@
   <ItemGroup>
     <None Remove="ClientApp\src\home\home.component.ts" />
     <None Remove="ClientApp\src\login\login.component.ts" />
+    <None Remove="ClientApp\src\models\DialogData.ts" />
+    <None Remove="ClientApp\src\models\ITour.ts" />
     <None Remove="ClientApp\src\models\Person.ts" />
     <None Remove="ClientApp\src\models\RequestResult.ts" />
     <None Remove="ClientApp\src\services\AuthService.ts" />
+    <None Remove="ClientApp\src\utils\DialogOverview.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,9 +39,12 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\home\home.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\login\login.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\models\DialogData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\models\ITour.ts" />
     <TypeScriptCompile Include="ClientApp\src\models\Person.ts" />
     <TypeScriptCompile Include="ClientApp\src\models\RequestResult.ts" />
     <TypeScriptCompile Include="ClientApp\src\services\AuthService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\utils\DialogOverview.ts" />
   </ItemGroup>
 
 </Project>

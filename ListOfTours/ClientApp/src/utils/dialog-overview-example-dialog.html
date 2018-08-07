@@ -1,0 +1,34 @@
+<h1 mat-dialog-title> {{title}}</h1>
+
+<hr />
+
+<div mat-dialog-content>
+
+  <p>Excursion:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.tour.name">
+  </mat-form-field>
+  <p>Client:</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.tour.clientName">
+  </mat-form-field>
+  <p>Date:</p>
+  
+    <!--<input matInput [(ngModel)]="data.tour.date">-->
+    <mat-form-field>
+      <input matInput
+             [matDatepicker]="picker"
+             placeholder="Choose a date"
+             [(ngModel)]="data.tour.date"
+             >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  
+  
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

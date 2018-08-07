@@ -45,7 +45,7 @@ export class RegistrationComponent implements OnDestroy, OnInit {
     let email = this._myForm.controls["userEmail"].value;
     let pwd = this._myForm.controls["userPassword"].value;
     let firstname = this._myForm.controls["userName"].value;
-    let secondname = this._myForm.controls["userPassword"].value;
+    let secondname = this._myForm.controls["userSecondName"].value;
 
     this.authService.registration(email, pwd, firstname, secondname)
       .subscribe(result => {

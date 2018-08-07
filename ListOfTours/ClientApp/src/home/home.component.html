@@ -1,36 +1,32 @@
-<table class="table table-hover table-bordered" style="">		  
-  <thead>			
-    <tr>			  
-      <th>#</th>			  
-      <th>First Name</th>			  
-      <th style="display: block; float: none;">Last Name</th>			  
-      <th>Username</th>			
-    </tr>		  
-  </thead>		  
-  <tbody>			
-    <tr>			  
-      <th scope="row">1</th>			  
-      <td>Mark</td>			  
-      <td>Otto</td>			  
-      <td>@mdo</td>			
-    </tr>			
-    <tr>			  
-      <th scope="row">2</th>
-              <td>Jacob</td>			  
-              <td>Thornton</td>			  
-              <td>@fat</td>			
-            </tr>			
-            <tr>			  
-              <th scope="row">3</th>			  
-              <td>Larry</td>			  
-              <td>the Bird</td>			  
-              <td>@twitter</td>			
-            </tr>		  
-          </tbody>		
-        </table>
+<table class="table table-hover table-bordered" style="">
+  <thead>
+    <tr style="background-color: lightgray;">
+      <th>#</th>
+      <th>Exursion</th>
+      <th>Client</th>
+      <th>Date</th>
+      <th width="5%"><button color="accent" mat-flat-button (click)="createOrUpdate()"><i class="fa fa-plus" aria-hidden="true"></i>  Add</button></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let tour of tours; let i = index" [attr.data-index]="i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ tour.name }}</td>
+      <td>{{ tour.clientName }}</td>
+      <td>{{ tour.date | date: 'dd/MM/yyyy' }}</td>
+      <td><button mat-flat-button color="white" (click)="createOrUpdate(tour)"><i class="fa fa-pencil" aria-hidden="true"></i>   Edit</button></td>
+    </tr>
+
+  </tbody>
+</table>
 <br>
 <ul>
-    <li *ngFor="let value of values">
-      {{ value }}
-    </li>
-  </ul>
+  <!--<li *ngFor="let tour of tours; let i = index" [attr.data-index]="i">
+    {{ i + 1 }} {{ tour.name }}
+  </li>-->
+</ul>
+
+
+
+<!--*ngFor="let item of items; let i = index" [attr.data-index]="i"-->
