@@ -58,6 +58,7 @@ import { HomeComponent } from "../home/home.component";
 import { RegistrationComponent } from "../registration/registration.component"
 
 import { AuthService } from "../services/AuthService";
+import { TourService } from "../services/tourService";
 import { DataSharingService } from "../services/DataSharingService";
 
 
@@ -133,6 +134,7 @@ import { DataSharingService } from "../services/DataSharingService";
   ],
   providers: [
     AuthService,
+    TourService,
     MatDialogModule,
     DataSharingService
   ],

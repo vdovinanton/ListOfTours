@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 import { IDialogData } from '../models/DialogData';
-import { Tour } from '../models/ITour';
+import { Tour } from '../models/Tour';
 
 //import { createWiresService } from 'selenium-webdriver/firefox';
 

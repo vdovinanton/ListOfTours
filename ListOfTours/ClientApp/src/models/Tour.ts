@@ -3,5 +3,6 @@ export class Tour {
     public id: number,
     public name: string,
     public clientName: string,
-    public date: Date) { }
+    public date: Date
+  ) { }
 }

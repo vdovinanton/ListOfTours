@@ -5,10 +5,15 @@ namespace ListOfTours.Repository.Implementations
 {
     public class PeopleRepository : Repository<Person>, IPersonRepository
     {
-        private UserContext _people;
+        private UserContext _db;
         public PeopleRepository(UserContext context) : base(context)
         {
-            _people = context;
+            _db = context;
+        }
+
+        public Person GetByEmail(string email)
+        {
+            return SingleOrDefault(_ => _.Email.Equals(email));
         }
     }
 }

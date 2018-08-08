@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/AuthService';
 import { Router } from '@angular/router';
-import { IPerson } from '../models/Person';
+import { Person } from '../models/Person';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { map } from 'rxjs/operators';
 
@@ -13,9 +13,8 @@ import { DataSharingService } from '../services/DataSharingService';
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  currentUser: IPerson;
+  currentUser: Person;
   isUserLoggedIn: boolean;
-
 
   constructor(private authService: AuthService, private router: Router, private dataSharingService: DataSharingService) {
     

@@ -105,10 +105,14 @@ namespace ListOfTours.Controllers
             }
             else
             {
+                var user = _personService.Get(claimsIdentity.Name);
                 return Json(new RequestResult
                 {
                     State = RequestState.Success,
-                    Data = new { UserName = claimsIdentity.Name }
+                    Data = new
+                    {
+                        Person = user
+                    }
                 });
             }
         }

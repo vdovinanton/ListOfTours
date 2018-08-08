@@ -3,9 +3,11 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router, CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, distinctUntilChanged, debounceTime, catchError } from 'rxjs/operators'
-import { IRequestResult } from '../models/RequestResult'
-import { IPerson } from "../models/Person";
 import { DataSharingService } from '../services/DataSharingService';
+
+import { Person } from "../models/Person";
+import { IRequestResult } from '../models/RequestResult'
+
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -74,15 +76,15 @@ export class AuthService implements CanActivate {
     return token != null;
   }
 
-  public currentUser(): Observable<IPerson> {
+  public currentUser(): Observable<Person> {
     let headers = this.initAuthHeaders();
 
     return this.http.get<IRequestResult>(this._account, { headers: headers })
       .pipe(
         map (
           res => {
-            let person : IPerson;
-            person = res.data as IPerson;
+            let person: Person;
+            person = res.data.person as Person;
             this.dataSharingService.currentUser.next(person);
             console.log(person);
             return person;

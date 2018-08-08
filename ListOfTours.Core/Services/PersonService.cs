@@ -11,6 +11,7 @@ namespace ListOfTours.Core.Services
         Person Get(Person person);
         ICollection<Person> GetAll();
         void Create(Person person);
+        Person Get(string email);
     }
     public class PersonService : IPersonService
     {
@@ -36,6 +37,11 @@ namespace ListOfTours.Core.Services
         public ICollection<Person> GetAll()
         {
             return _people.GetAll().ToList();
+        }
+
+        public Person Get(string email)
+        {
+            return _people.GetByEmail(email);
         }
 
         /// <summary>

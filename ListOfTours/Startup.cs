@@ -34,6 +34,9 @@ namespace ListOfTours
             services.AddScoped<IPersonRepository, PeopleRepository>();
             services.AddScoped<IPersonService, PersonService>();
 
+            services.AddScoped<ITourRepository, TourRepository>();
+            services.AddScoped<ITourService, TourService>();
+
             services.AddAuthentication().AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;

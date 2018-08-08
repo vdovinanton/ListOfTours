@@ -14,19 +14,10 @@
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ tour.name }}</td>
       <td>{{ tour.clientName }}</td>
-      <td>{{ tour.date | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ tour.date | date: 'dd/MM/yyyy' }}</td> 
       <td><button mat-flat-button color="white" (click)="createOrUpdate(tour)"><i class="fa fa-pencil" aria-hidden="true"></i>   Edit</button></td>
     </tr>
 
   </tbody>
 </table>
 <br>
-<ul>
-  <!--<li *ngFor="let tour of tours; let i = index" [attr.data-index]="i">
-    {{ i + 1 }} {{ tour.name }}
-  </li>-->
-</ul>
-
-
-
-<!--*ngFor="let item of items; let i = index" [attr.data-index]="i"-->

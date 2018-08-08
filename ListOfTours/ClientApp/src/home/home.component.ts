@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { AuthService } from '../services/AuthService';
 import { Router } from '@angular/router';
-import { IPerson } from '../models/Person';
+
+import { AuthService } from '../services/AuthService';
+import { TourService } from '../services/tourService';
+
 import { IDialogData } from '../models/DialogData';
-import { Tour } from '../models/ITour';
+import { Person } from '../models/Person';
+import { Tour } from '../models/Tour';
 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -23,15 +26,22 @@ export class HomeComponent {
   //todo move to service
   private tokeyKey = "token";
 
-  private tours = [
-    new Tour(1, "ATTRACTION BARCELONA", "Rudenko A.", null),
-    new Tour(2, "ARTISTIC BARCELONA", "Sadovnikova M.", null),
-    new Tour(3, "TOURIST BUS ONE DAY", "Johanson Van A.", null),
-    new Tour(4, "BARCELONA HIGHLIGHTS", "Petrov P.", null),
-    new Tour(5, "DAY TRIP TO PORTAVENTURA", "Parker A.", null)
-  ]
+  private tours: Tour[];
+  //  = [
+  //  new Tour(1, "ATTRACTION BARCELONA", "Rudenko A.", null),
+  //  new Tour(2, "ARTISTIC BARCELONA", "Sadovnikova M.", null),
+  //  new Tour(3, "TOURIST BUS ONE DAY", "Johanson Van A.", null),
+  //  new Tour(4, "BARCELONA HIGHLIGHTS", "Petrov P.", null),
+  //  new Tour(5, "DAY TRIP TO PORTAVENTURA", "Parker A.", null)
+  //]
   
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router, public dialog: MatDialog) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private tourService: TourService,
+    private router: Router,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     if (this.authService.checkLogin()) {
@@ -62,40 +72,23 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-
-
-      if (result && !result.isEditMode && (result.tour.name && result.tour.clientName))
+      
+      if (result && (result.tour.name && result.tour.clientName))
       {
-        // todo: replace for request to server and regresh datasource or via observebol collection
-        this.tours.push(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date));
-      }  
-
-      console.log('tour', this.tours);
+        this.tourService.CreateOrUpdate(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date)).subscribe(result => {
+        });
+      }
+      this.getTableData();
     });
   }
+ 
 
   // todo: header should be in the service
   private getTableData(): void {
-    let header = this.initAuthHeaders();
-    let options = { headers: header };
 
-
-    this.http.get('/api/values', options).subscribe(result => {
-      this.values = result as string[];
-    }, error => console.error(error));
-  }
-
-  private getLocalToken(): string {
-    return sessionStorage.getItem(this.tokeyKey);
-  }
-
-  private initAuthHeaders(): HttpHeaders {
-    let token = this.getLocalToken();
-    if (token == null) throw "No token";
-
-    let headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set("Authorization", "Bearer " + token);
-    return headers;
+    this.tourService.getTours().subscribe(result => {
+      console.log(result);
+      this.tours = result;
+    })
   }
 }

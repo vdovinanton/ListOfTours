@@ -10,5 +10,6 @@ namespace ListOfTours.Repository.Interfaces
     /// </summary>
     public interface IPersonRepository : IRepository<Person>
     {
+        Person GetByEmail(string email);
     }
 }
