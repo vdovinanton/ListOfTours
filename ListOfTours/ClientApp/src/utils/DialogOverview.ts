@@ -39,7 +39,7 @@ export class DialogOverview implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data: IDialogData
   ) {  }
 
-  onNoClick(): void {
+  onCancelClick(): void {
     this.dialogRef.close();
   }
 }

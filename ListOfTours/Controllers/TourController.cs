@@ -4,6 +4,7 @@ using ListOfTours.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ListOfTours.Controllers
 {
@@ -34,9 +35,9 @@ namespace ListOfTours.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public IActionResult CreateOrUpdate([FromBody]Tour tour)
+        public async Task<IActionResult> CreateOrUpdate([FromBody]Tour tour)
         {
-            var item = _tourService.CreateOrUpdate(tour);
+            var item = await _tourService.CreateOrUpdateAsync(tour);
 
             return Json(new RequestResult
             {

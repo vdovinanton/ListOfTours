@@ -62,23 +62,23 @@ export class HomeComponent {
   }
 
   openDialog(tour: Tour): void {
+    let tourReplica = tour;
     const dialogRef = this.dialog.open(DialogOverview, {
       height: '500px',
       width: '400px',
       data: {
-        tour: tour
+        tour: tourReplica
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-      
-      if (result && (result.tour.name && result.tour.clientName))
-      {
+    dialogRef.afterClosed().subscribe(result => {      
+      if (result && (result.tour.name && result.tour.clientName)) {
         this.tourService.CreateOrUpdate(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date)).subscribe(result => {
+          this.getTableData();
         });
+      } else {
+        this.getTableData();
       }
-      this.getTableData();
     });
   }
  

@@ -80,7 +80,7 @@ namespace ListOfTours.Controllers
 
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.Email, "TokenAuth"),
-                new[] { new Claim("ID", user.ID.ToString()) }
+                new[] { new Claim("ID", user.Id.ToString()) }
             );
 
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor

@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\home\home.component.ts" />
     <None Remove="ClientApp\src\login\login.component.ts" />
     <None Remove="ClientApp\src\models\DialogData.ts" />
@@ -15,10 +22,6 @@
     <None Remove="ClientApp\src\services\AuthService.ts" />
     <None Remove="ClientApp\src\services\tourService.ts" />
     <None Remove="ClientApp\src\utils\DialogOverview.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

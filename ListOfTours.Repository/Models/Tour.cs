@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ListOfTours.Repository.Models
@@ -13,5 +14,7 @@ namespace ListOfTours.Repository.Models
         public string ClientName { get; set; }
 
         public DateTime Date { get; set; }
+
+        public ICollection<ExcursionSight> ExcursionSights { get; set; }
     }
 }
