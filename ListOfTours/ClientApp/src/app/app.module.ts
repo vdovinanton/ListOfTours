@@ -12,6 +12,8 @@ import { DialogOverview } from '../utils/DialogOverview';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 
+import { NgxSmoothDnDModule } from 'ngx-smooth-dnd';
+
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -122,6 +124,8 @@ import { DataSharingService } from "../services/DataSharingService";
     MatDialogModule,
 
     BrowserAnimationsModule,
+
+    NgxSmoothDnDModule,
 
     RouterModule.forRoot([
       { path: '', redirectTo: 'login', pathMatch: 'full' },

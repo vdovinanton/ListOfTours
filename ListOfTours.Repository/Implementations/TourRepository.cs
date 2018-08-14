@@ -1,6 +1,11 @@
 ﻿using ListOfTours.Repository.Interfaces;
 using ListOfTours.Repository.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Linq.Expressions;
+using System;
 
 namespace ListOfTours.Repository.Implementations
 {
@@ -12,9 +17,25 @@ namespace ListOfTours.Repository.Implementations
             _db = context;
         }
 
+        public async Task<IEnumerable<Tour>> GetAllWithExcursionsAsync()
+        {
+            return await Context
+                .Set<Tour>()
+                .AsNoTracking()
+                .Include(_ => _.ExcursionSights)
+                .ToListAsync();
+        }
+
+        private Tour SingleOrDefaultWithExcursionSights(Expression<Func<Tour, bool>> predicate)
+        {
+            return Context.Set<Tour>()
+                .Include(_ => _.ExcursionSights)
+                .SingleOrDefault(predicate);
+        }
+
         public async Task<Tour> CreateOrUpdateAsync(Tour tour)
         {
-            var item = SingleOrDefault(_ => _.Name == tour.Name);
+            var item = SingleOrDefaultWithExcursionSights(_ => _.Name == tour.Name);
 
             if (item == null)
             {
@@ -25,6 +46,11 @@ namespace ListOfTours.Repository.Implementations
                 item.Name = tour.Name;
                 item.ClientName = tour.ClientName;
                 item.Date = tour.Date;
+
+                foreach (var excursionSight in item.ExcursionSights)
+                    excursionSight.OrderIndex = tour.ExcursionSights
+                        .FirstOrDefault(_ => _.Id == excursionSight.Id)
+                        .OrderIndex;
             }
 
             await Context.SaveChangesAsync();

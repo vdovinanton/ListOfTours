@@ -19,21 +19,7 @@ import { DialogOverview } from '../utils/DialogOverview';
 })
 export class HomeComponent {
 
-
-  public values: string[];
-
-  //todo: add Guard
-  //todo move to service
-  private tokeyKey = "token";
-
   private tours: Tour[];
-  //  = [
-  //  new Tour(1, "ATTRACTION BARCELONA", "Rudenko A.", null),
-  //  new Tour(2, "ARTISTIC BARCELONA", "Sadovnikova M.", null),
-  //  new Tour(3, "TOURIST BUS ONE DAY", "Johanson Van A.", null),
-  //  new Tour(4, "BARCELONA HIGHLIGHTS", "Petrov P.", null),
-  //  new Tour(5, "DAY TRIP TO PORTAVENTURA", "Parker A.", null)
-  //]
   
   constructor(
     private http: HttpClient,
@@ -73,7 +59,7 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(result => {      
       if (result && (result.tour.name && result.tour.clientName)) {
-        this.tourService.CreateOrUpdate(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date)).subscribe(result => {
+        this.tourService.CreateOrUpdate(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date, result.tour.excursionSights)).subscribe(result => {
           this.getTableData();
         });
       } else {
@@ -82,8 +68,6 @@ export class HomeComponent {
     });
   }
  
-
-  // todo: header should be in the service
   private getTableData(): void {
 
     this.tourService.getTours().subscribe(result => {

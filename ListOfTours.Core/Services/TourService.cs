@@ -2,14 +2,15 @@
 using ListOfTours.Repository.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ListOfTours.Core.Services
 {
     public interface ITourService
     {
-        IEnumerable<Tour> GetAll();
-
         Task<Tour> CreateOrUpdateAsync(Tour tour);
+
+        Task<IEnumerable<Tour>> GetAllWithExcursionsAsync();
     }
     public class TourService : ITourService
     {
@@ -20,9 +21,14 @@ namespace ListOfTours.Core.Services
             _tours = tours;
         }
 
-        public IEnumerable<Tour> GetAll()
+        public async Task<IEnumerable<Tour>> GetAllWithExcursionsAsync()
         {
-            return _tours.GetAll();
+            var tours = await _tours.GetAllWithExcursionsAsync();
+
+            foreach (var excursion in tours.SelectMany(_ => _.ExcursionSights))
+                excursion.Tour = null;
+
+            return tours;
         }
 
         public async Task<Tour> CreateOrUpdateAsync(Tour tour)

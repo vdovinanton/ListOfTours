@@ -19,9 +19,9 @@ namespace ListOfTours.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var tours = _tourService.GetAll();
+            var tours = await _tourService.GetAllWithExcursionsAsync();
 
             return Json(new RequestResult
             {
