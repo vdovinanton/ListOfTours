@@ -3,19 +3,31 @@
     <br>
     <nav >
       <ul *ngIf="!isUserLoggedIn"></ul>
-        <ul *ngIf="isUserLoggedIn" class="nav nav-pills float-right" style="margin-top: 30px;">
-          <li style="bottom: 5px;position: relative;" class="nav-item">
-            <h3>  {{ currentUser?.firstName != null || currentUser?.lastName != null ? 'Hello,' : ''}} {{ currentUser?.firstName }} {{currentUser?.lastName}}</h3>
-          </li>
-          <li class="nav-item">
-            <div class="container">
-                <button (click)="logout()" type="button" class="btn btn-light btn-sm">Log out <i class="fa fa-sign-out" aria-hidden="true"></i></button>
-            </div>
-          </li>
-          <li class="nav-item">
-            
-          </li>
-        </ul>
+      <ul *ngIf="isUserLoggedIn" class="nav nav-pills float-right" style="margin-top: 30px;">
+        <li style="bottom: 5px;position: relative;" class="nav-item">
+
+          <mat-card style="padding: 3px">
+            <span style="margin: 20px;">
+              {{ currentUser?.firstName != null || currentUser?.lastName != null ? 'Hello,' : ''}} {{ currentUser?.firstName }} {{currentUser?.lastName}}
+            </span>
+            <button
+                    mat-mini-fab
+                    [matMenuTriggerFor]="menu"
+                    matBadge="8"
+                    matBadgeColor="accent"
+                    >
+              <div id="avatar"></div>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Profile <i class="fa fa-user" aria-hidden="true"></i></button>
+              <button mat-menu-item (click)="logout()">Log out <i class="fa fa-sign-out" aria-hidden="true"></i></button>
+              <button mat-menu-item >About <i class="fa fa-question" aria-hidden="true"></i>
+</button>
+            </mat-menu>
+          </mat-card>
+          
+        </li>
+      </ul>
       </nav>
     <div *ngIf="!isUserLoggedIn">
         <div class="col-12 text-center logo" >
