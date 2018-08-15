@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ListOfTours.Core.Services;
+using ListOfTours.Core.Interfaces;
 
 namespace ListOfTours.Controllers
 {

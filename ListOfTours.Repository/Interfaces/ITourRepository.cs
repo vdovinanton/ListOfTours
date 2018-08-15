@@ -9,5 +9,7 @@ namespace ListOfTours.Repository.Interfaces
         Task<Tour> CreateOrUpdateAsync(Tour tour);
 
         Task<IEnumerable<Tour>> GetAllWithExcursionsAsync();
+
+        Task<IEnumerable<Tour>> GetAvalible();
     }
 }

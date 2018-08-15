@@ -4,10 +4,13 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 import { ContainerComponent, DraggableComponent, IDropResult } from 'ngx-smooth-dnd';
 
+import { TourService } from '../services/tourService';
 import { IDialogData } from '../models/DialogData';
 import { Tour } from '../models/Tour';
 import { ExcursionSight } from '../models/ExcursionSight';
 import { createWiresService } from 'selenium-webdriver/firefox';
+
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -18,49 +21,107 @@ import { createWiresService } from 'selenium-webdriver/firefox';
 export class DialogOverview implements OnInit {
 
   private isEditMode: boolean = false;
+
   private title: string = "tour";
+
   private tour: Tour = {
     id: 0, name: "", clientName: "", date: null, excursionSights: null
   }
 
-  ngOnInit(): void {
-    this.isEditMode = this.data.tour != null;
-    this.title = this.isEditMode ?
-      "Edit " + this.title :
-      "Create " + this.title;
+  private _tours: Tour[];
+  private _dataLoaded: boolean;
+  private _myForm: FormGroup;
+  private _selectedTour: Tour;
+  private _excursionSights: ExcursionSight[];
 
-    if (!this.isEditMode)
-      this.data.tour = this.tour;
-
-    // objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} ); 
-
-    this.data.tour.excursionSights.sort(function (a, b) { return (a.orderIndex > b.orderIndex) ? 1 : ((b.orderIndex > a.orderIndex) ? -1 : 0); });
-
-    this.data.isEditMode = this.isEditMode;
-    console.log('ngOnInit', this.isEditMode);
-    console.log('data: ', this.data);
-  }
   constructor(
-      public dialogRef: MatDialogRef<DialogOverview>,
-      @Inject(MAT_DIALOG_DATA) public data: IDialogData
-  ) {  }
+    public dialogRef: MatDialogRef<DialogOverview>,
+    private tourService: TourService,
+    @Inject(MAT_DIALOG_DATA) public data: IDialogData
+  ) {
+    this._myForm = new FormGroup({
+      "toursAutocomplete": new FormControl("", [
+        Validators.required
+      ]),
+      "excursionAutocomplete": new FormControl("", [
+        Validators.required
+      ]),
+      "datePicker": new FormControl("", [
+        Validators.required
+      ]),
+      "clientName": new FormControl("", [
+        Validators.required
+      ])
+    });
+  }
+
+  submit() {
+    //let name = this._myForm.controls["clientName"].value;
+    //let pwd = this._myForm.controls["userPassword"].value;
+
+    console.log('submit');
+
+  }
+
+  onTourClick(tour: Tour): void
+  {
+    this.onTourInputChange();
+    this.tourService.getExcursions(tour.id).subscribe(result => {
+      this._excursionSights = result;
+    })
+  }
+
+  onTourInputChange(): void {
+    this._excursionSights = [];
+  }
+
+  onExcursionClick(tour: Tour): void {
+    console.log('onExcursionClick');
+  }
+
+  ngOnInit(): void {
+    this.tourService.getTours().subscribe(result => {
+      this._tours = result;
+    })
+
+    
+    this._dataLoaded = true;
+    //this.isEditMode = this.data.tour != null;
+    //this.title = this.isEditMode ?
+    //  "Edit " + this.title :
+    //  "Create " + this.title;
+
+    //if (!this.isEditMode)
+    //  this.data.tour = this.tour;
+
+    //this.data.tour.excursionSights.sort(function (a, b) { return (a.orderIndex > b.orderIndex) ? 1 : ((b.orderIndex > a.orderIndex) ? -1 : 0); });
+
+    //this.data.isEditMode = this.isEditMode;
+    //console.log('ngOnInit', this.isEditMode);
+    //console.log('data: ', this.data);
+  }
+
+  //this.onFormChanges();
+  //onFormChanges(): void {
+  //  this._myForm.valueChanges.subscribe(result => {
+  //    if (result["toursAutocomplete"]) {
+  //      //this._myForm.controls["toursAutocomplete"].value = "";
+  //      console.log(result["toursAutocomplete"]);
+  //    }
+  //  });
+  //}
 
   onDrop(dropResult: IDropResult) {
     // update item list according to the @dropResult
     console.log(dropResult);
-    this.data.tour.excursionSights = this.applyDrag(this.data.tour.excursionSights, dropResult);
-    console.log(this.data.tour.excursionSights);
+    this._excursionSights = this.applyDrag(this._excursionSights, dropResult);
 
-
-    for (let i = 0; i < this.data.tour.excursionSights.length; i++)
+    for (let i = 0; i < this._excursionSights.length; i++)
     {
-      //console.log(this.data.tour.excursionSights[i]);
-      this.data.tour.excursionSights[i].orderIndex = i;
-      this.data.tour.excursionSights[i].orderIndex++;
+      this._excursionSights[i].orderIndex = i;
+      this._excursionSights[i].orderIndex++;
     }
-
-
-    console.log(this.data.tour.excursionSights);
+    
     //var temp = this.data.tour.excursionSights[dropResult.removedIndex].orderIndex;
     //this.data.tour.excursionSights[dropResult.removedIndex].orderIndex = this.data.tour.excursionSights[dropResult.addedIndex].orderIndex;
     //this.data.tour.excursionSights[dropResult.addedIndex].orderIndex = temp;

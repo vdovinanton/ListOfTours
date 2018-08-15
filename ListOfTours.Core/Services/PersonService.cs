@@ -1,4 +1,5 @@
-﻿using ListOfTours.Models;
+﻿using ListOfTours.Core.Interfaces;
+using ListOfTours.Models;
 using ListOfTours.Repository.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -6,13 +7,6 @@ using System.Linq;
 
 namespace ListOfTours.Core.Services
 {
-    public interface IPersonService
-    {
-        Person Get(Person person);
-        ICollection<Person> GetAll();
-        void Create(Person person);
-        Person Get(string email);
-    }
     public class PersonService : IPersonService
     {
         private readonly IPersonRepository _people;

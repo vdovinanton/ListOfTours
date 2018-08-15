@@ -1,9 +1,10 @@
-﻿using ListOfTours.Core.Services;
+﻿using ListOfTours.Core.Interfaces;
 using ListOfTours.Repository.Models;
 using ListOfTours.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ListOfTours.Controllers
@@ -17,24 +18,15 @@ namespace ListOfTours.Controllers
             _tourService = tourService;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IEnumerable<Tour> Get()
         {
-            var tours = await _tourService.GetAllWithExcursionsAsync();
-
-            return Json(new RequestResult
-            {
-                State = RequestState.Success,
-                Data = new
-                {
-                    tours = tours
-                }
-            });
+            return _tourService.GetAll();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateOrUpdate([FromBody]Tour tour)
         {
             var item = await _tourService.CreateOrUpdateAsync(tour);

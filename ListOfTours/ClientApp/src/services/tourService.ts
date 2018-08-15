@@ -5,11 +5,13 @@ import { Observable, of } from 'rxjs';
 import { map, distinctUntilChanged, debounceTime, catchError } from 'rxjs/operators'
 
 import { Tour } from "../models/Tour";
-import { IRequestResult } from '../models/RequestResult'
+import { IRequestResult } from '../models/RequestResult';
+import { ExcursionSight } from '../models/ExcursionSight';
 
 @Injectable()
 export class TourService {
-  private _tour = "/api/tour"
+  private _tour = "/api/tour";
+  private _excursion = "/api/excursion";
   private _tokeyKey = "token";
 
   constructor(
@@ -39,12 +41,25 @@ export class TourService {
   public getTours(): Observable<Tour[]> {
     let headers = this.initAuthHeaders();
 
-    return this.http.get<IRequestResult>(this._tour, { headers: headers })
+    return this.http.get<Tour[]>(this._tour, { headers: headers })
       .pipe(
         map(
           res => {
-            let tours: Tour[];
-            tours = res.data.tours as Tour[];
+            let tours = res as Tour[];
+            return tours;
+          }
+        )
+      )
+  }
+
+  public getExcursions(tourId: number): Observable<ExcursionSight[]> {
+    let headers = this.initAuthHeaders();
+
+    return this.http.get<ExcursionSight[]>(this._excursion + "/" + tourId, { headers: headers })
+      .pipe(
+        map(
+          res => {
+            let tours = res as ExcursionSight[];
             return tours;
           }
         )

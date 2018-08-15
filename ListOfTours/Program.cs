@@ -23,19 +23,12 @@ namespace ListOfTours
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<UserContext>();
-                try
-                {
-                    // mock data
-                    SeedData.Initialize(services);
-                }
-                catch (Exception ex)
-                {
-                    
-                }
+
+                // mock data
+                SeedData.Initialize(services);
             }
 
             host.Run();
-            //BuildWebHost(args).Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

@@ -33,6 +33,14 @@ namespace ListOfTours.Repository.Implementations
                 .SingleOrDefault(predicate);
         }
 
+        public async Task<IEnumerable<Tour>> GetAvalible()
+        {
+            return await Context
+                .Set<Tour>()
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<Tour> CreateOrUpdateAsync(Tour tour)
         {
             var item = SingleOrDefaultWithExcursionSights(_ => _.Name == tour.Name);

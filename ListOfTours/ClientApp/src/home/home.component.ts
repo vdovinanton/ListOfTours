@@ -38,6 +38,9 @@ export class HomeComponent {
        error => console.error(error));
 
       this.getTableData() // mock
+      //this.tourService.getExcursions(1).subscribe(result => {
+      //  console.log(result);
+      //});
     } else {
       this.router.navigate(["login"]);
     }
@@ -50,8 +53,8 @@ export class HomeComponent {
   openDialog(tour: Tour): void {
     let tourReplica = tour;
     const dialogRef = this.dialog.open(DialogOverview, {
-      height: '500px',
-      width: '400px',
+      height: '550px',
+      width: '500px',
       data: {
         tour: tourReplica
       }
@@ -59,7 +62,14 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(result => {      
       if (result && (result.tour.name && result.tour.clientName)) {
-        this.tourService.CreateOrUpdate(new Tour(0, result.tour.name, result.tour.clientName, result.tour.date, result.tour.excursionSights)).subscribe(result => {
+        var callbackTour = new Tour(
+          0,
+          result.tour.name,
+          result.tour.clientName,
+          result.tour.date,
+          result.tour.excursionSights
+        )
+        this.tourService.CreateOrUpdate(callbackTour).subscribe(result => {
           this.getTableData();
         });
       } else {
@@ -73,6 +83,9 @@ export class HomeComponent {
     this.tourService.getTours().subscribe(result => {
       console.log(result);
       this.tours = result;
+
+
+      //this.openDialog(this.tours[0]);
     })
   }
 }

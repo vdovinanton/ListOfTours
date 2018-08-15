@@ -1,4 +1,5 @@
 ﻿using System;
+using ListOfTours.Core.Interfaces;
 using ListOfTours.Core.Services;
 using ListOfTours.Models;
 using ListOfTours.Repository;
@@ -33,9 +34,11 @@ namespace ListOfTours
 
             services.AddScoped<IPersonRepository, PeopleRepository>();
             services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IExcursionRepository, ExcursionRepository>();
 
             services.AddScoped<ITourRepository, TourRepository>();
             services.AddScoped<ITourService, TourService>();
+            services.AddScoped<IExcursionService, ExcursionService>();
 
             services.AddAuthentication().AddJwtBearer(cfg =>
             {
