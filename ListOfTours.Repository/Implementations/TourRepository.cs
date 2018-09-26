@@ -43,7 +43,7 @@ namespace ListOfTours.Repository.Implementations
 
         public async Task<Tour> CreateOrUpdateAsync(Tour tour)
         {
-            var item = SingleOrDefaultWithExcursionSights(_ => _.Name == tour.Name);
+            var item = SingleOrDefaultWithExcursionSights(_ => _.Id == tour.Id);
 
             if (item == null)
             {
@@ -54,11 +54,22 @@ namespace ListOfTours.Repository.Implementations
                 item.Name = tour.Name;
                 item.ClientName = tour.ClientName;
                 item.Date = tour.Date;
-
-                foreach (var excursionSight in item.ExcursionSights)
-                    excursionSight.OrderIndex = tour.ExcursionSights
-                        .FirstOrDefault(_ => _.Id == excursionSight.Id)
-                        .OrderIndex;
+                try
+                {
+                    foreach (var excursionSight in item.ExcursionSights)
+                    {
+                        excursionSight.Tour = null;
+                        var first = tour.ExcursionSights.FirstOrDefault(unknown => unknown.Id == excursionSight.Id);
+                        if (first != null)
+                            excursionSight.OrderIndex = first
+                                .OrderIndex;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e); // should be logging
+                    throw;
+                }
             }
 
             await Context.SaveChangesAsync();

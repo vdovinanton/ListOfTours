@@ -37,10 +37,7 @@ export class HomeComponent {
       this.authService.currentUser().subscribe(() => { },
        error => console.error(error));
 
-      this.getTableData() // mock
-      //this.tourService.getExcursions(1).subscribe(result => {
-      //  console.log(result);
-      //});
+      this.getTableData();
     } else {
       this.router.navigate(["login"]);
     }
@@ -60,15 +57,16 @@ export class HomeComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {      
-      if (result && (result.tour.name && result.tour.clientName)) {
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('callback', result);
+      if (result && (result.name && result.clientName)) {
         var callbackTour = new Tour(
-          0,
-          result.tour.name,
-          result.tour.clientName,
-          result.tour.date,
-          result.tour.excursionSights
-        )
+          result.id,
+          result.name,
+          result.clientName,
+          result.date,
+          result.excursionSights
+        );
         this.tourService.CreateOrUpdate(callbackTour).subscribe(result => {
           this.getTableData();
         });
@@ -79,13 +77,8 @@ export class HomeComponent {
   }
  
   private getTableData(): void {
-
     this.tourService.getTours().subscribe(result => {
-      console.log(result);
       this.tours = result;
-
-
-      //this.openDialog(this.tours[0]);
-    })
+    });
   }
 }

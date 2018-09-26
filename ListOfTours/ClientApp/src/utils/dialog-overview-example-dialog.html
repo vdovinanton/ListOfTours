@@ -12,7 +12,8 @@
       <mat-form-field style="width: 250px;">
         <input matInput
                formControlName="clientName"
-               placeholder="Client">
+               placeholder="Client"
+               [(ngModel)]="_tour.clientName">
         <mat-error *ngIf="_myForm.controls['clientName'].invalid">Your Client name is not correct</mat-error>
       </mat-form-field>
       <br />
@@ -24,7 +25,8 @@
                matInput
                (input)="onTourInputChange()"
                formControlName="toursAutocomplete"
-               [matAutocomplete]="auto">
+               [matAutocomplete]="auto"
+               [(ngModel)]="_tour.name">
         <mat-error *ngIf="_myForm.controls['toursAutocomplete'].invalid">Your Tour name is not correct</mat-error>
 
         <mat-autocomplete #auto="matAutocomplete">
@@ -43,14 +45,6 @@
         </smooth-dnd-draggable>
       </smooth-dnd-container>
 
-      <!--<smooth-dnd-container (drop)="onDrop($event)">
-        <smooth-dnd-draggable *ngFor="let excursion of _excursionSights; let i = index">
-          <div class="draggable-item" (click)="onExcursionClick(excursion)">
-            {{ i + 1 }}. {{ excursion.name | slice:0:21}}
-          </div>
-        </smooth-dnd-draggable>
-      </smooth-dnd-container>-->
-
       <br />
       <!-- DateTime -->
       <mat-form-field style="width: 250px;">
@@ -58,7 +52,7 @@
                formControlName="datePicker"
                [matDatepicker]="picker"
                placeholder="Choose a date"
-               [(ngModel)]="_date">
+               [(ngModel)]="_tour.date">
 
         <mat-error *ngIf="_myForm.controls['datePicker'].invalid">Your Date time is not correct</mat-error>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -70,51 +64,6 @@
 
   <div mat-dialog-actions>
     <button style="margin-right: 15px;" mat-flat-button color="white" (click)="onCancelClick()">Cancel</button>
-    <button style="margin-right: 15px;" color="accent" mat-flat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+    <button style="margin-right: 15px;" color="accent" mat-flat-button [mat-dialog-close]="_tour" cdkFocusInitial>Save</button>
   </div>
 </div>
-
-
-
-
-  <!--<div mat-dialog-content>
-
-    <p>Excursion:</p>
-    <mat-form-field>
-      <input matInput [(ngModel)]="data.tour.name">
-    </mat-form-field>
-    <p>Client:</p>
-    <mat-form-field>
-      <input matInput [(ngModel)]="data.tour.clientName">
-    </mat-form-field>
-    <p>Date:</p>
-
-    <mat-form-field>
-      <input matInput
-             [matDatepicker]="picker"
-             placeholder="Choose a date"
-             [(ngModel)]="data.tour.date">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-
-  </div>-->
-  <!--<form class="example-form">
-    <mat-form-field class="example-full-width">
-      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let option of options" [value]="option">
-          {{option}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </form>-->
-  <!--<smooth-dnd-container (drop)="onDrop($event)">
-    <smooth-dnd-draggable *ngFor="let excursion of data.tour.excursionSights">
-      <div class="draggable-item">
-        {{ excursion.name }}
-      </div>
-    </smooth-dnd-draggable>
-  </smooth-dnd-container>-->
-
-

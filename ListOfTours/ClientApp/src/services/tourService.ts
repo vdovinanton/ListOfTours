@@ -29,7 +29,8 @@ export class TourService {
     return this.http.post<IRequestResult>(this._tour, tour, { headers: headers })
       .pipe(
         map(
-          res => {
+        res => {
+            console.log(res);
             let tour: Tour;
             tour = res.data.tour as Tour;
             return tour;
@@ -49,7 +50,7 @@ export class TourService {
             return tours;
           }
         )
-      )
+      );
   }
 
   public getExcursions(tourId: number): Observable<ExcursionSight[]> {
@@ -63,7 +64,7 @@ export class TourService {
             return tours;
           }
         )
-      )
+      );
   }
 
   private initAuthHeaders(): HttpHeaders {

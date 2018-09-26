@@ -24,21 +24,26 @@ export class DialogOverview implements OnInit {
 
   private title: string = "tour";
 
-  private tour: Tour = {
+  private _tour: Tour = {
     id: 0, name: "", clientName: "", date: null, excursionSights: null
   }
+
+  private _dialogData: IDialogData;
 
   private _tours: Tour[];
   private _dataLoaded: boolean;
   private _myForm: FormGroup;
   private _selectedTour: Tour;
   private _excursionSights: ExcursionSight[];
+ 
 
   constructor(
     public dialogRef: MatDialogRef<DialogOverview>,
     private tourService: TourService,
     @Inject(MAT_DIALOG_DATA) public data: IDialogData
   ) {
+    this._dialogData = data;
+    console.log(data);
     this._myForm = new FormGroup({
       "toursAutocomplete": new FormControl("", [
         Validators.required
@@ -56,11 +61,7 @@ export class DialogOverview implements OnInit {
   }
 
   submit() {
-    //let name = this._myForm.controls["clientName"].value;
-    //let pwd = this._myForm.controls["userPassword"].value;
-
     console.log('submit');
-
   }
 
   onTourClick(tour: Tour): void
@@ -68,7 +69,7 @@ export class DialogOverview implements OnInit {
     this.onTourInputChange();
     this.tourService.getExcursions(tour.id).subscribe(result => {
       this._excursionSights = result;
-    })
+    });
   }
 
   onTourInputChange(): void {
@@ -82,34 +83,23 @@ export class DialogOverview implements OnInit {
   ngOnInit(): void {
     this.tourService.getTours().subscribe(result => {
       this._tours = result;
-    })
+    });
 
-    
+    if (this._dialogData.tour) { // edit mode
+
+      this._tour.id = this._dialogData.tour.id;
+      this._tour.name = this._dialogData.tour.name;
+      this._tour.clientName = this._dialogData.tour.clientName;
+      this._tour.date = this._dialogData.tour.date;
+
+      this.tourService.getExcursions(this._dialogData.tour.id).subscribe(result => {
+        this._excursionSights = result;
+        this._tour.excursionSights = this._excursionSights;
+      });
+    }
+
     this._dataLoaded = true;
-    //this.isEditMode = this.data.tour != null;
-    //this.title = this.isEditMode ?
-    //  "Edit " + this.title :
-    //  "Create " + this.title;
-
-    //if (!this.isEditMode)
-    //  this.data.tour = this.tour;
-
-    //this.data.tour.excursionSights.sort(function (a, b) { return (a.orderIndex > b.orderIndex) ? 1 : ((b.orderIndex > a.orderIndex) ? -1 : 0); });
-
-    //this.data.isEditMode = this.isEditMode;
-    //console.log('ngOnInit', this.isEditMode);
-    //console.log('data: ', this.data);
   }
-
-  //this.onFormChanges();
-  //onFormChanges(): void {
-  //  this._myForm.valueChanges.subscribe(result => {
-  //    if (result["toursAutocomplete"]) {
-  //      //this._myForm.controls["toursAutocomplete"].value = "";
-  //      console.log(result["toursAutocomplete"]);
-  //    }
-  //  });
-  //}
 
   onDrop(dropResult: IDropResult) {
     // update item list according to the @dropResult
@@ -121,10 +111,6 @@ export class DialogOverview implements OnInit {
       this._excursionSights[i].orderIndex = i;
       this._excursionSights[i].orderIndex++;
     }
-    
-    //var temp = this.data.tour.excursionSights[dropResult.removedIndex].orderIndex;
-    //this.data.tour.excursionSights[dropResult.removedIndex].orderIndex = this.data.tour.excursionSights[dropResult.addedIndex].orderIndex;
-    //this.data.tour.excursionSights[dropResult.addedIndex].orderIndex = temp;
   }
 
   applyDrag (arr, dragResult) {
